@@ -6,9 +6,12 @@
  *
  *   --bg      page background
  *   --text    name and links
- *   --accent  monogram and link hover
- *   --font    everything
- *   --car     label in the bottom-right corner
+ *   --accent    link hover and the stripe / chevron
+ *   --monogram  colour of the æ
+ *   --font      everything
+ *   --car       label in the bottom-right corner
+ *
+ * Each livery's stripe or chevron is further down, under "Livery shapes".
  */
 
 /* Gulf (also the fallback if JavaScript is off) */
@@ -17,6 +20,7 @@
     --bg: #c2e7fe;
     --text: #192c76;
     --accent: #ff7403;
+    --monogram: #ff7403;
     --font: 'Montserrat', sans-serif;
     --car: "gt-40";
 }
@@ -26,6 +30,7 @@
     --bg: #ffffff;
     --text: #000000;
     --accent: #c60001;
+    --monogram: #ffffff;   /* white, because it sits on the red chevron */
     --font: 'Old Standard TT', serif;
     --car: "mp4-4";
 }
@@ -44,7 +49,7 @@ body {
 /* The æ in the top middle, which is also the theme switch */
 .monogram {
     position: absolute;
-    top: 24px;
+    top: 56px;
     left: 50%;
     transform: translateX(-50%);
     background: none;
@@ -55,7 +60,7 @@ body {
     font-weight: 700;
     font-size: 64px;
     line-height: 1;
-    color: var(--accent);
+    color: var(--monogram);
     transition: color 0.3s;
 }
 
@@ -98,4 +103,44 @@ body {
     bottom: 20px;
     font-size: 16px;
     color: var(--text);
+}
+
+
+/*
+ * Livery shapes.
+ * A layer covering the whole window, behind the text, that each
+ * livery paints differently.
+ */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;   /* clicks go straight through it */
+}
+
+/* Gulf: an orange stripe with navy pinstripes, running top to bottom.
+   It sits to the left so it doesn't run behind the æ and the links.
+   The pinstripes are the borders; the padding is the thin gap of blue
+   between them and the orange. */
+[data-theme="gulf"] body::before {
+    right: auto;
+    left: 10vw;
+    width: clamp(64px, 10vw, 128px);
+    border-left: 3px solid var(--text);
+    border-right: 3px solid var(--text);
+    padding: 0 4px;
+    background: var(--accent);
+    background-clip: content-box;
+}
+
+/* Marlboro McLaren: a red band across the top whose lower edge forms
+   a chevron pointing up. The points of the shape are x y pairs,
+   going clockwise from the top-left corner.
+   The middle point (the tip of the chevron) is 14% of the window
+   height down, but never less than 140px, so the white æ (which ends
+   about 110px from the top) always stays on red, even in short
+   windows. The sides go down to 38% of the height. */
+[data-theme="mclaren"] body::before {
+    background: var(--accent);
+    clip-path: polygon(0 0, 100% 0, 100% 38%, 50% max(14%, 140px), 0 38%);
 }
