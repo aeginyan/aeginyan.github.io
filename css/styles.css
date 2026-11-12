@@ -45,6 +45,16 @@
     --car: "jps lotus";
 }
 
+/* Martini Porsche */
+[data-theme="martini"] {
+    --bg: #ffffff;
+    --text: #303d60;
+    --accent: #c2111c;
+    --monogram: var(--bg);   /* same as the page, as if cut out of the red stripe */
+    --font: 'Rubik', sans-serif;
+    --car: "917";
+}
+
 
 body {
     height: 100vh;
@@ -105,6 +115,16 @@ body {
     color: var(--accent);
 }
 
+/* Martini is written in full caps. The æ is left lowercase,
+   otherwise it would turn into Æ. */
+[data-theme="martini"] body {
+    text-transform: uppercase;
+}
+
+[data-theme="martini"] .monogram {
+    text-transform: none;
+}
+
 /* JPS has only black and gold, and the links are already gold, so
    hovering draws a thin gold underline instead of changing colour. */
 [data-theme="jps"] .links > a:hover {
@@ -136,17 +156,17 @@ body::before {
     pointer-events: none;   /* clicks go straight through it */
 }
 
-/* Gulf: an orange stripe with navy pinstripes, running top to bottom.
-   It sits to the left so it doesn't run behind the æ and the links.
+/* Gulf: an orange stripe with navy pinstripes, running across the
+   whole page just under the links, like the other liveries.
    The pinstripes are the borders; the padding is the thin gap of blue
    between them and the orange. */
 [data-theme="gulf"] body::before {
-    right: auto;
-    left: 10vw;
-    width: clamp(64px, 10vw, 128px);
-    border-left: 3px solid var(--text);
-    border-right: 3px solid var(--text);
-    padding: 0 4px;
+    top: calc(45% + 110px);
+    bottom: auto;
+    height: 40px;
+    border-top: 3px solid var(--text);
+    border-bottom: 3px solid var(--text);
+    padding: 4px 0;
     background: var(--accent);
     background-clip: content-box;
 }
@@ -177,4 +197,24 @@ body::before {
     border-bottom: 1px solid var(--accent);
     background: var(--accent);
     background-clip: content-box;
+}
+
+/* Martini Porsche: seven stripes running across the very top of the
+   page: dark blue, light blue, dark blue, red, dark blue, light blue,
+   dark blue. The red one is thick enough for the white æ to sit in it.
+   Each colour is written as "colour start end", measured in px from
+   the top of the window. The red stripe (51px to 135px) is placed so
+   the æ sits in its exact middle; if you move the æ (.monogram "top"),
+   move the red stripe by the same amount. */
+[data-theme="martini"] body::before {
+    bottom: auto;
+    height: 186px;
+    background: linear-gradient(to bottom,
+        #303d60   0px  19px,
+        #5da6e0  19px  43px,
+        #303d60  43px  51px,
+        #c2111c  51px 135px,
+        #303d60 135px 143px,
+        #5da6e0 143px 167px,
+        #303d60 167px 186px);
 }
