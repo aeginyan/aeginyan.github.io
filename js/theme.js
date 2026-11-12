@@ -1,6 +1,6 @@
 // The liveries, in the order the monogram cycles through them.
 // Each name must match a [data-theme="..."] block in css/styles.css.
-const themes = ["gulf", "mclaren"];
+const themes = ["gulf", "mclaren", "jps"];
 
 const root = document.documentElement;
 

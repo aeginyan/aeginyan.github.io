@@ -35,6 +35,16 @@
     --car: "mp4-4";
 }
 
+/* JPS Lotus */
+[data-theme="jps"] {
+    --bg: #11191b;
+    --text: #e4c78f;
+    --accent: #e4c78f;
+    --monogram: #e4c78f;
+    --font: 'Libre Baskerville', serif;
+    --car: "jps lotus";
+}
+
 
 body {
     height: 100vh;
@@ -95,6 +105,14 @@ body {
     color: var(--accent);
 }
 
+/* JPS has only black and gold, and the links are already gold, so
+   hovering draws a thin gold underline instead of changing colour. */
+[data-theme="jps"] .links > a:hover {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 6px;
+}
+
 /* Car name in the bottom-right corner */
 .car::after {
     content: var(--car);
@@ -143,4 +161,20 @@ body::before {
 [data-theme="mclaren"] body::before {
     background: var(--accent);
     clip-path: polygon(0 0, 100% 0, 100% 38%, 50% max(14%, 140px), 0 38%);
+}
+
+/* JPS Lotus: a gold double pinstripe running across the whole page,
+   just under the links. Same trick as Gulf: the thick line is the
+   background, the thin one is the border, and the padding is the
+   black gap between them.
+   "45% + 120px" means: from the middle of the name and links (45%),
+   120px further down. */
+[data-theme="jps"] body::before {
+    top: calc(45% + 120px);
+    bottom: auto;
+    height: 3px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid var(--accent);
+    background: var(--accent);
+    background-clip: content-box;
 }
