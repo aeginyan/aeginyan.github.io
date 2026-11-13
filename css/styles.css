@@ -1,20 +1,3 @@
-/*
- * Liveries.
- * Every colour, font and the car label come from these variables.
- * To add a livery: copy a block, change the values, and add its
- * name to the list in js/theme.js.
- *
- *   --bg      page background
- *   --text    name and links
- *   --accent    link hover and the stripe / chevron
- *   --monogram  colour of the æ
- *   --font      everything
- *   --car       label in the bottom-right corner
- *
- * Each livery's stripe or chevron is further down, under "Livery shapes".
- */
-
-/* Gulf (also the fallback if JavaScript is off) */
 :root,
 [data-theme="gulf"] {
     --bg: #c2e7fe;
@@ -25,17 +8,15 @@
     --car: "gt-40";
 }
 
-/* Marlboro McLaren */
 [data-theme="mclaren"] {
     --bg: #ffffff;
     --text: #000000;
     --accent: #c60001;
-    --monogram: #ffffff;   /* white, because it sits on the red chevron */
+    --monogram: #ffffff;
     --font: 'Old Standard TT', serif;
     --car: "mp4-4";
 }
 
-/* JPS Lotus */
 [data-theme="jps"] {
     --bg: #11191b;
     --text: #e4c78f;
@@ -45,16 +26,14 @@
     --car: "jps lotus";
 }
 
-/* Martini Porsche */
 [data-theme="martini"] {
     --bg: #ffffff;
     --text: #303d60;
     --accent: #c2111c;
-    --monogram: var(--bg);   /* same as the page, as if cut out of the red stripe */
+    --monogram: var(--bg);
     --font: 'Rubik', sans-serif;
     --car: "917";
 }
-
 
 body {
     height: 100vh;
@@ -66,7 +45,6 @@ body {
     transition: background-color 0.3s, color 0.3s;
 }
 
-/* The æ in the top middle, which is also the theme switch */
 .monogram {
     position: absolute;
     top: 56px;
@@ -93,7 +71,7 @@ body {
     width: 100%;
 }
 
-.banner > h1 {
+h1 {
     font-size: clamp(40px, 7vw, 88px);
     margin: 0 0 24px;
 }
@@ -102,21 +80,18 @@ body {
     font-size: 25px;
 }
 
-.links > a {
+.links a {
     color: var(--text);
     padding: 3px;
     margin: 12px;
     text-decoration: none;
-    white-space: nowrap;
     transition: color 0.3s;
 }
 
-.links > a:hover {
+.links a:hover {
     color: var(--accent);
 }
 
-/* Martini is written in full caps. The æ is left lowercase,
-   otherwise it would turn into Æ. */
 [data-theme="martini"] body {
     text-transform: uppercase;
 }
@@ -125,44 +100,30 @@ body {
     text-transform: none;
 }
 
-/* JPS has only black and gold, and the links are already gold, so
-   hovering draws a thin gold underline instead of changing colour. */
-[data-theme="jps"] .links > a:hover {
+[data-theme="jps"] .links a:hover {
     text-decoration: underline;
     text-decoration-thickness: 1px;
     text-underline-offset: 6px;
 }
 
-/* Car name in the bottom-right corner */
 .car::after {
     content: var(--car);
     position: absolute;
     right: 24px;
     bottom: 20px;
-    font-size: 16px;
     color: var(--text);
 }
 
-
-/*
- * Livery shapes.
- * A layer covering the whole window, behind the text, that each
- * livery paints differently.
- */
 body::before {
     content: "";
-    position: fixed;
+    /* not fixed: on iOS Safari fixed is measured from the visual viewport and drifts from the æ */
+    position: absolute;
     inset: 0;
-    pointer-events: none;   /* clicks go straight through it */
+    pointer-events: none;
 }
 
-/* Gulf: an orange stripe with navy pinstripes, running across the
-   whole page just under the links, like the other liveries.
-   The pinstripes are the borders; the padding is the thin gap of blue
-   between them and the orange. */
 [data-theme="gulf"] body::before {
     top: calc(45% + 110px);
-    bottom: auto;
     height: 40px;
     border-top: 3px solid var(--text);
     border-bottom: 3px solid var(--text);
@@ -171,27 +132,13 @@ body::before {
     background-clip: content-box;
 }
 
-/* Marlboro McLaren: a red band across the top whose lower edge forms
-   a chevron pointing up. The points of the shape are x y pairs,
-   going clockwise from the top-left corner.
-   The middle point (the tip of the chevron) is 14% of the window
-   height down, but never less than 140px, so the white æ (which ends
-   about 110px from the top) always stays on red, even in short
-   windows. The sides go down to 38% of the height. */
 [data-theme="mclaren"] body::before {
     background: var(--accent);
     clip-path: polygon(0 0, 100% 0, 100% 38%, 50% max(14%, 140px), 0 38%);
 }
 
-/* JPS Lotus: a gold double pinstripe running across the whole page,
-   just under the links. Same trick as Gulf: the thick line is the
-   background, the thin one is the border, and the padding is the
-   black gap between them.
-   "45% + 120px" means: from the middle of the name and links (45%),
-   120px further down. */
 [data-theme="jps"] body::before {
     top: calc(45% + 120px);
-    bottom: auto;
     height: 3px;
     padding-bottom: 4px;
     border-bottom: 1px solid var(--accent);
@@ -199,17 +146,10 @@ body::before {
     background-clip: content-box;
 }
 
-/* Martini Porsche: seven stripes running across the very top of the
-   page: dark blue, light blue, dark blue, red, dark blue, light blue,
-   dark blue. The red one is thick enough for the white æ to sit in it.
-   Each colour is written as "colour start end", measured in px from
-   the top of the window. The red stripe (51px to 135px) is placed so
-   the æ sits in its exact middle; if you move the æ (.monogram "top"),
-   move the red stripe by the same amount. */
+/* the red stripe (51px-135px) centres the æ; move both together */
 [data-theme="martini"] body::before {
-    bottom: auto;
     height: 186px;
-    background: linear-gradient(to bottom,
+    background: linear-gradient(
         #303d60   0px  19px,
         #5da6e0  19px  43px,
         #303d60  43px  51px,
